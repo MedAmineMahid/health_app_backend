@@ -23,7 +23,15 @@ public class Activity {
     private LocalDateTime time;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "report_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "report_id")
+    private MedicalRecord medicalRecord;
+
+    @ManyToOne
+    @JoinColumn(name = "report_id")
+    private Report report;
 
 }
