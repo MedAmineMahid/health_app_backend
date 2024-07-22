@@ -1,7 +1,7 @@
 package com.example.healthy.services;
 
-import com.example.healthy.entities.User;
-import com.example.healthy.repositories.UserRepository;
+import com.example.healthy.security.entities.User;
+import com.example.healthy.security.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void deleteUserById(Long userId) {
+    public void deleteUserById(String userId) {
         userRepository.deleteById(userId);
     }
 
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User getUserById(Long userId) {
+    public User getUserById(String userId) {
         return userRepository.findById(userId).get();
     }
 

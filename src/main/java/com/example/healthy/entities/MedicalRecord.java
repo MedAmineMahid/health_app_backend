@@ -20,7 +20,16 @@ public class MedicalRecord {
     private String hereditaryDiseases;
     private String healthHistory;
 
-    @OneToOne(mappedBy = "medicalRecord")
+    @OneToOne(mappedBy = "medicalRecord",fetch=FetchType.LAZY)
     private User user;
+
+    @OneToMany(mappedBy = "medicalRecord",fetch=FetchType.LAZY)
+    private List<Meal> meals;
+
+    @OneToMany(mappedBy = "medicalRecord",fetch=FetchType.LAZY)
+    private List<Activity> activities;
+
+    @OneToMany(mappedBy = "medicalRecord",fetch=FetchType.LAZY)
+    private List<HealthData> healthData;
 
 }

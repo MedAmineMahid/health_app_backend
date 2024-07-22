@@ -1,6 +1,6 @@
 package com.example.healthy.services;
 
-import com.example.healthy.entities.User;
+import com.example.healthy.security.entities.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,8 +9,8 @@ import java.util.List;
 public interface UserService {
     User saveUser(User user);
     User updateUser(User user);
-    void deleteUserById(Long id);
+    void deleteUserById(String id);
     void deleteAllUser();
-    User getUserById(Long id);
+    User getUserById(String id);
     List<User> getAllUsers();
 }

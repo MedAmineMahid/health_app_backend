@@ -1,77 +1,46 @@
 package com.example.healthy.security;
 
-import com.example.healthy.security.services.AccountServiceImp;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import java.util.List;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
-public class SecurityConfig{
-   private final PasswordEncoder passwordEncoder;
+@RequiredArgsConstructor
+public class SecurityConfig {
+    private final PasswordEncoder passwordEncoder;
 
-    public SecurityConfig(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-        return httpSecurity
-                .formLogin(Customizer.withDefaults())
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+
                 .httpBasic(Customizer.withDefaults())
-                .authorizeHttpRequests(
-                        authCustomizer -> authCustomizer
-                                .requestMatchers(
-                                        "listManagedBonus","listBonusByEmp","createBonus","saveBonus",
-                                        "createEmploye","saveEmploye","employeList","deleteEmploye","showEmploye", "updateEmploye",
-                                        "listManagedLeaves","acceptLeave","rejectLeave","listLeavesByEmp",
-                                        "createLeaveType","saveLeaveType","showLeaveType","updateLeaveType","deleteLeaveType",
-                                        "showProfile",
-                                        "listManagedTasks","listEmployeTasks","createTask","saveTask",
-                                        "createPerson","savePerson","PersonList","deletePerson","showPerson"
-                                        ).hasRole("MANAGER")
-                                .requestMatchers("/login","/webjars/**").permitAll()
-                                .anyRequest().authenticated()
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers("/api/auth/register", "/api/auth/login", "/webjars/**").permitAll()
+                        .anyRequest().permitAll()
                 )
-                .exceptionHandling(e ->e.accessDeniedPage("/accessDenied"))
-                .csrf(AbstractHttpConfigurer::disable)
-                .build();
-        /*
-                .formLogin(
-                        formLogin -> formLogin
-                                .loginPage("/login")
-                                .defaultSuccessUrl("/")
+                .exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer
+                        .accessDeniedPage("/accessDenied")
                 )
-                */
+                .csrf(AbstractHttpConfigurer::disable);
+
+        // Logging des configurations pour le debug
+        System.out.println("Security configuration applied");
+
+        return httpSecurity.build();
     }
 
-    @Autowired
-    AccountServiceImp accountServiceImp;
     @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> {
-            com.example.healthy.security.entities.User userEntity = accountServiceImp.loadUserByUsername(username);
-            if (userEntity == null) {
-                throw new UsernameNotFoundException("User not found with username: " + username);
-            }
-            List<String> roleNames = accountServiceImp.listRole(userEntity);
-
-            return User.builder()
-                    .username(userEntity.getUsername())
-                    .password(userEntity.getPassword())
-                    .roles(roleNames.toArray(new String[0]))
-                    .build();
-        };
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }
-

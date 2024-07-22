@@ -1,9 +1,6 @@
 package com.example.healthy.security.entities;
 
-import com.example.healthy.entities.Activity;
-import com.example.healthy.entities.HealthData;
-import com.example.healthy.entities.Meal;
-import com.example.healthy.entities.MedicalRecord;
+import com.example.healthy.entities.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,8 +25,15 @@ public class User {
     private String firstName;
     private String lastName;
     private String healthGoals;
+    private String name;
+    private String goals;
 
-    //Each user has many roles
+    @OneToMany(mappedBy = "user",fetch=FetchType.LAZY)
+    private List<Notification> notifications;
+
+    @OneToMany(mappedBy = "user",fetch=FetchType.LAZY)
+    private List<Report> reports;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles= new ArrayList<>();
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
