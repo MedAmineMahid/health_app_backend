@@ -18,7 +18,7 @@ public class User {
     @Id
     private String userId;
     @Column(unique = true)
-    private String username;//username is used at the same time as an email in order to send credentials
+    private String username;
     private String password;
     private int age;
     private String gender;

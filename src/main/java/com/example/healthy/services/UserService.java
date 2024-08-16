@@ -4,6 +4,7 @@ import com.example.healthy.security.entities.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface UserService {
@@ -13,4 +14,6 @@ public interface UserService {
     void deleteAllUser();
     User getUserById(String id);
     List<User> getAllUsers();
+
+    Optional<User> findUserById(String userId);
 }
