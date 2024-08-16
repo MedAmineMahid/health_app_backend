@@ -1,5 +1,6 @@
 package com.example.healthy.security.controllers;
 
+import com.example.healthy.security.JwtUtil;
 import com.example.healthy.security.entities.User;
 import com.example.healthy.security.services.AccountServiceImp;
 import lombok.AllArgsConstructor;
@@ -9,7 +10,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -18,6 +23,7 @@ public class UserController {
 
     private final AccountServiceImp accountServiceImp;
     private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
@@ -34,10 +40,18 @@ public class UserController {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return ResponseEntity.ok("User authenticated successfully");
+
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String jwt = jwtUtil.generateToken(userDetails);
+
+            // Return a JSON object with the JWT token
+            Map<String, String> response = new HashMap<>();
+            response.put("token", jwt);
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }

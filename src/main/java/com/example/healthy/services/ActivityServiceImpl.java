@@ -1,17 +1,21 @@
 package com.example.healthy.services;
 
 import com.example.healthy.entities.Activity;
-import com.example.healthy.entities.HealthData;
 import com.example.healthy.repositories.ActivityRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@AllArgsConstructor
-public class ActivityServiceImpl implements ActivityService{
-    private ActivityRepository activityRepository;
+public class ActivityServiceImpl implements ActivityService {
+
+    private final ActivityRepository activityRepository;
+
+    public ActivityServiceImpl(ActivityRepository activityRepository) {
+        this.activityRepository = activityRepository;
+    }
+
     @Override
     public Activity saveActivity(Activity activity) {
         return activityRepository.save(activity);
@@ -19,7 +23,17 @@ public class ActivityServiceImpl implements ActivityService{
 
     @Override
     public Activity updateActivity(Activity activity) {
-        return activityRepository.save(activity);
+        Optional<Activity> existingActivity = activityRepository.findById(activity.getId());
+        if (existingActivity.isPresent()) {
+            Activity updatedActivity = existingActivity.get();
+            updatedActivity.setName(activity.getName());
+            updatedActivity.setDescription(activity.getDescription());
+            updatedActivity.setStartTime(activity.getStartTime());
+            updatedActivity.setEndTime(activity.getEndTime());
+            return activityRepository.save(updatedActivity);
+        } else {
+            throw new IllegalArgumentException("Activity not found with id: " + activity.getId());
+        }
     }
 
     @Override
@@ -28,15 +42,23 @@ public class ActivityServiceImpl implements ActivityService{
     }
 
     @Override
-    public void deleteAllActivity() {
+    public void deleteAllActivities() {
         activityRepository.deleteAll();
     }
 
     @Override
     public Activity getActivityById(Long id) {
-        return activityRepository.findById(id).get();    }
+        return activityRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Activity not found with id: " + id));
+    }
 
     @Override
-    public List<Activity> getAllActivity() {
-        return activityRepository.findAll();    }
+    public List<Activity> getAllActivities() {
+        return activityRepository.findAll();
+    }
+
+    @Override
+    public List<Activity> getActivitiesByMedicalRecordId(Long medicalRecordId) {
+        return activityRepository.findByMedicalRecordId(medicalRecordId);
+    }
 }
