@@ -14,4 +14,6 @@ public interface ActivityService {
     Activity getActivityById(Long id);
     List<Activity> getAllActivities();
     List<Activity> getActivitiesByMedicalRecordId(Long medicalRecordId);
+
+    List<Activity> getActivitiesByUserId(String userId);
 }

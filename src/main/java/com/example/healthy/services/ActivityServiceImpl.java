@@ -26,10 +26,10 @@ public class ActivityServiceImpl implements ActivityService {
         Optional<Activity> existingActivity = activityRepository.findById(activity.getId());
         if (existingActivity.isPresent()) {
             Activity updatedActivity = existingActivity.get();
-            updatedActivity.setName(activity.getName());
+            updatedActivity.setTitle(activity.getTitle());
             updatedActivity.setDescription(activity.getDescription());
-            updatedActivity.setStartTime(activity.getStartTime());
-            updatedActivity.setEndTime(activity.getEndTime());
+            updatedActivity.setTime(activity.getTime());
+            updatedActivity.setDuration(activity.getDuration());
             return activityRepository.save(updatedActivity);
         } else {
             throw new IllegalArgumentException("Activity not found with id: " + activity.getId());
@@ -60,5 +60,10 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public List<Activity> getActivitiesByMedicalRecordId(Long medicalRecordId) {
         return activityRepository.findByMedicalRecordId(medicalRecordId);
+    }
+
+    @Override
+    public List<Activity> getActivitiesByUserId(String userId) {
+        return List.of();
     }
 }

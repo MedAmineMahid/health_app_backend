@@ -18,13 +18,9 @@ public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
     private String title;
     private String description;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private String activityType;
-    private String intensity;
+
     private int duration;
     private LocalDateTime time;
 
@@ -33,11 +29,11 @@ public class Activity {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "medical_id")
     private MedicalRecord medicalRecord;
 
     @ManyToOne
     @JoinColumn(name = "report_id")
     private Report report;
+
 
 }

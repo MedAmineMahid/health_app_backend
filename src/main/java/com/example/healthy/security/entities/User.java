@@ -56,4 +56,12 @@ public class User {
         this.username = email;
         this.password = password;
     }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }

@@ -5,6 +5,8 @@ import com.example.healthy.security.entities.User;
 import com.example.healthy.security.repositories.UserRepository;
 import com.example.healthy.services.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -26,15 +28,26 @@ public class ActivityController {
     }
 
     @PostMapping
-    public Activity createActivity(@RequestBody Activity activity) {
-        String userId = getSignedInUserId();
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            activity.setUser(user.get());
-            return activityService.saveActivity(activity);
-        } else {
-            throw new IllegalArgumentException("User not found with id: " + userId);
+    public ResponseEntity<?> createActivity(@RequestBody Activity activity) {
+        try {
+            String userId = getSignedInUserId();
+            Optional<User> user = userRepository.findById(userId);
+            if (user.isPresent()) {
+                activity.setUser(user.get());
+                Activity savedActivity = activityService.saveActivity(activity);
+                return ResponseEntity.ok(savedActivity);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("User not found with id: " + userId);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error creating activity: " + e.getMessage());
         }
+    }
+    @GetMapping("/user/{userId}/activities")
+    public List<Activity> getUserActivities(@PathVariable String userId) {
+        return activityService.getActivitiesByUserId(userId);
     }
 
     @PutMapping("/{id}")
