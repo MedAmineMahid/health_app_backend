@@ -37,4 +37,9 @@ public class IngredientServiceImpl implements IngredientService {
     public void deleteById(Long id) {
         ingredientReposiory.deleteById(id);
     }
+
+    @Override
+    public List<Ingredient> findAllByMealId(Long mealId) {
+        return ingredientReposiory.findAllByMeal(mealId);
+    }
 }

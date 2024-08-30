@@ -13,4 +13,6 @@ public interface UserService {
     void deleteAllUser();
     User getUserById(String id);
     List<User> getAllUsers();
+
+    Double getMaxDailyCalories();
 }

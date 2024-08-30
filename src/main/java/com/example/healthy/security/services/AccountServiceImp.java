@@ -107,9 +107,12 @@ public class AccountServiceImp implements AccountService {
             user.setUserId(UUID.randomUUID().toString());
             String clearPassword = user.getPassword();
             user.setPassword(passwordEncoder.encode(clearPassword));
+            //set role customer
+
             //max calories
             user.setMaxDailyCalories();
             User savedUser= userRepository.save(user);
+
             try{
                 sendEmail.sendEmail(user.getUsername(),"Your Credentials For Healthy",username+" "+clearPassword);
                 System.out.println("\n New user was created username  : "+user.getUsername() +"password   : "+clearPassword);

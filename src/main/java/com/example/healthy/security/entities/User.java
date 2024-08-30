@@ -1,5 +1,4 @@
 package com.example.healthy.security.entities;
-
 import com.example.healthy.entities.*;
 import com.example.healthy.enums.ActivityLevel;
 import jakarta.persistence.*;
@@ -20,22 +19,25 @@ public class User {
     private String userId;
     @Column(unique = true)
     private String username;//username is used at the same time as an email in order to send credentials
-    private String password;
-    private int age;
-    private String gender;
-    private String firstName;
-    private String lastName;
-    private String healthGoals;
+    private String password;//
+    private int age;//
+    private String gender;//
+    private String firstName;//
+    private String lastName;//
+    private String healthGoals;//
     private String name;
     private String goals;
-    private Double weight;
-    private Double height;
+    private Double weight;//
+    private Double height;//
+    @Enumerated(EnumType.STRING)
     private ActivityLevel activityLevel;
     private Double bmr;
     private Double maxDailyCalories;
 
 
     public void setBmr() {
+        System.err.println("setting BMR");
+
         if(this.weight != null && this.height != null && this.height > 0 && this.weight > 0){
             if(this.gender.toLowerCase().equals("men")){
                 //BMR=10×weight (kg)+6.25×height (cm)−5×age (years)+5
@@ -80,6 +82,7 @@ public class User {
     }
 
     public void setMaxDailyCalories() {
+        System.err.println("setting max daily calories");
         this.setBmr();
         if(activityLevel!=null && this.bmr != null){
             switch (activityLevel){

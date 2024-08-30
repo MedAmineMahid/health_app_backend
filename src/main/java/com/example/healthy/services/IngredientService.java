@@ -14,4 +14,5 @@ public interface IngredientService {
     public Ingredient update(Ingredient ingredient);
     public void deleteById(Long id);
 
+    List<Ingredient> findAllByMealId(Long mealId);
 }

@@ -2,7 +2,9 @@ package com.example.healthy.services;
 
 import com.example.healthy.security.entities.User;
 import com.example.healthy.security.repositories.UserRepository;
+import com.example.healthy.security.services.UserDetailServiceImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,5 +41,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @Autowired
+    UserDetailServiceImpl userDetailService;
+    @Override
+    public Double getMaxDailyCalories() {
+        User user = userDetailService.getLoggedUser();
+        return user.getMaxDailyCalories();
     }
 }

@@ -9,6 +9,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
 
@@ -28,4 +32,20 @@ public class UserDetailServiceImpl implements UserDetailsService {
                 .build();
 
     }
+    public User getLoggedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            System.out.println("Connected user: " + userDetails.getUsername());
+
+           User u= accountService.loadUserByUsername(userDetails.getUsername());
+
+
+            return u;
+        }
+
+        return null;
+    }
+
 }

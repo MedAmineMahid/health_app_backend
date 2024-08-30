@@ -1,23 +1,13 @@
 package com.example.healthy.controllers;
-
 import com.example.healthy.entities.DailyMeal;
 import com.example.healthy.entities.Ingredient;
-import com.example.healthy.services.DailyMealService;
-import com.example.healthy.services.IngredientService;
-import com.example.healthy.services.MealService;
+import com.example.healthy.security.services.UserDetailServiceImpl;
+import com.example.healthy.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -25,6 +15,7 @@ import java.util.Map;
 public class nutritionController {
     @Autowired
     MealService mealService;
+
 
     @RequestMapping("/caloriesCaluculator/{foodQuery}")
     public String caloriesCaluculator(@PathVariable String foodQuery ) {
@@ -42,10 +33,46 @@ public class nutritionController {
     DailyMealService dailyMealService;
     @Autowired
     IngredientService ingredientService;
+    @Autowired
+    UserDetailServiceImpl userDetailService;
+
+    @Autowired
+    IngredientServiceImpl ingredientServiceImpl;
+
+    @Autowired
+    UserServiceImpl userServiceImpl;
     //DailyMeal
     @PostMapping("/meals/save")
     public ResponseEntity<String> saveMeal(@RequestBody DailyMeal dailyMeal) {
-        dailyMealService.addDailyMeal(dailyMeal);
-        System.out.println("\n saved meal : \n "+dailyMeal.toString());
+        dailyMeal.setUser(userDetailService.getLoggedUser());
+        DailyMeal d = dailyMealService.addDailyMeal(dailyMeal);
+        List<Ingredient> ingredients = dailyMeal.getIngredients();
+        System.out.println("Ingredients before persist: " + ingredients);
+        for (Ingredient ingredient : ingredients) {
+            ingredient.setDailyMeal(d);
+            ingredientService.addIngredient(ingredient);
+        }
+
         return ResponseEntity.ok("Meal saved successfully");
-    }}
+    }
+
+    @GetMapping("/meals/list")
+    public ResponseEntity<List<DailyMeal>> getMeals() {
+        System.out.println( dailyMealService.getDailyMeals().size());
+
+        return ResponseEntity.ok(dailyMealService.getDailyMeals());
+    }
+
+    @GetMapping("meals/listIngredients/{mealId}")
+    public ResponseEntity<List<Ingredient>> getIngredients(@PathVariable Long mealId) {
+        System.out.println("selected meal Id : "+mealId);
+        return  ResponseEntity.ok(ingredientService.findAllByMealId(mealId));
+    }
+
+    @GetMapping("/calories/maxCalories")
+    public Double getMaxCalories() {
+        System.out.println("springboot max calories");
+        //get logged user max daily calories
+        return userServiceImpl.getMaxDailyCalories();
+    }
+}
