@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 @AllArgsConstructor
@@ -22,18 +23,12 @@ public class Activity {
     private String description;
 
     private int duration;
-    private LocalDateTime time;
+    private LocalDate time;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    private MedicalRecord medicalRecord;
-
-    @ManyToOne
-    @JoinColumn(name = "report_id")
-    private Report report;
 
 
 }

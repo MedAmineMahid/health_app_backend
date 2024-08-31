@@ -31,9 +31,6 @@ public class User {
     @OneToMany(mappedBy = "user",fetch=FetchType.LAZY)
     private List<Notification> notifications;
 
-    @OneToMany(mappedBy = "user",fetch=FetchType.LAZY)
-    private List<Report> reports;
-
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles= new ArrayList<>();
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -45,8 +42,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<HealthData> healthData;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private MedicalRecord medicalRecord;
+
 
     public List<Role> getRoles() {
         return roles;

@@ -57,13 +57,8 @@ public class ActivityServiceImpl implements ActivityService {
         return activityRepository.findAll();
     }
 
-    @Override
-    public List<Activity> getActivitiesByMedicalRecordId(Long medicalRecordId) {
-        return activityRepository.findByMedicalRecordId(medicalRecordId);
-    }
-
-    @Override
+@Override
     public List<Activity> getActivitiesByUserId(String userId) {
-        return List.of();
+        return activityRepository.findByUser_UserId(userId);
     }
 }

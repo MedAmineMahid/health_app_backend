@@ -25,9 +25,6 @@ public class Meal {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "medicalRecord_id")
-    private MedicalRecord medicalRecord;
 
     @ManyToOne
     @JoinColumn(name = "mealReport_id")

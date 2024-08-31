@@ -11,8 +11,7 @@ import java.util.Optional;
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
     // Method to find all activities associated with a specific MedicalRecord
-    List<Activity> findByMedicalRecordId(Long medicalRecordId);
+    List<Activity> findByUser_UserId(String userId);
 
     // Method to find an activity by its ID and associated MedicalRecord ID
-    Optional<Activity> findByIdAndMedicalRecordId(Long activityId, Long medicalRecordId);
 }

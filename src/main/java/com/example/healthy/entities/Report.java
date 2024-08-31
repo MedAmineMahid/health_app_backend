@@ -22,8 +22,6 @@ public class Report {
     @OneToMany(mappedBy = "report",fetch=FetchType.LAZY)
     private List<Meal> meals;
 
-    @OneToMany(mappedBy = "report",fetch=FetchType.LAZY)
-    private List<Activity> activities;
 
     @OneToMany(mappedBy = "report",fetch=FetchType.LAZY)
     private List<HealthData> healthData;

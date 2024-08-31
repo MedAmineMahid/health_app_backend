@@ -1,8 +1,10 @@
 package com.example.healthy.security.controllers;
 
+import com.example.healthy.security.UserDTO;
 import com.example.healthy.security.entities.User;
 import com.example.healthy.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,16 +17,15 @@ import java.util.Optional;
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserDataController {
-
     private final UserService userService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<?> getUserData(@PathVariable String userId) {
-        Optional<User> user = userService.findUserById(userId);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
+    public ResponseEntity<UserDTO> getUserData(@PathVariable String userId) {
+        UserDTO userDTO = userService.getUserById(userId);
+        if (userDTO != null) {
+            return ResponseEntity.ok(userDTO);
         } else {
-            return ResponseEntity.status(404).body("User not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 }

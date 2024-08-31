@@ -46,8 +46,17 @@ public class ActivityController {
         }
     }
     @GetMapping("/user/{userId}/activities")
-    public List<Activity> getUserActivities(@PathVariable String userId) {
-        return activityService.getActivitiesByUserId(userId);
+    public ResponseEntity<List<Activity>> getUserActivities(@PathVariable String userId) {
+        try {
+            List<Activity> activities = activityService.getActivitiesByUserId(userId);
+            if (activities.isEmpty()) {
+                return ResponseEntity.noContent().build(); // No content if the list is empty
+            }
+            return ResponseEntity.ok(activities);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null); // Consider returning an error message or logging the error
+        }
     }
 
     @PutMapping("/{id}")
@@ -71,10 +80,7 @@ public class ActivityController {
         return activityService.getAllActivities();
     }
 
-    @GetMapping("/medicalRecord/{medicalRecordId}")
-    public List<Activity> getActivitiesByMedicalRecordId(@PathVariable Long medicalRecordId) {
-        return activityService.getActivitiesByMedicalRecordId(medicalRecordId);
-    }
+
 @GetMapping ("/user")
     private String getSignedInUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
