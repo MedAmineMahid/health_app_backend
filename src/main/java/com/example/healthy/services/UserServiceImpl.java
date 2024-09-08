@@ -53,10 +53,8 @@ public class UserServiceImpl implements UserService{
         userDTO.setUsername(user.getUsername());
         userDTO.setAge(user.getAge());
         userDTO.setGender(user.getGender());
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setHealthGoals(user.getHealthGoals());
-        userDTO.setGoals(user.getGoals());
+
+        userDTO.setGoals(user.getGoal());
 
         // Map activities
         List<ActivityDTO> activities = user.getActivities().stream().map(activity -> {

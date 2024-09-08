@@ -45,6 +45,7 @@ public class ActivityController {
                     .body("Error creating activity: " + e.getMessage());
         }
     }
+
     @GetMapping("/user/{userId}/activities")
     public ResponseEntity<List<Activity>> getUserActivities(@PathVariable String userId) {
         try {
@@ -54,10 +55,10 @@ public class ActivityController {
             }
             return ResponseEntity.ok(activities);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null); // Consider returning an error message or logging the error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 
     @PutMapping("/{id}")
     public Activity updateActivity(@PathVariable Long id, @RequestBody Activity activity) {

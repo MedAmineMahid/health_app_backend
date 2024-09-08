@@ -22,11 +22,8 @@ public class User {
     private String password;
     private int age;
     private String gender;
-    private String firstName;
-    private String lastName;
-    private String healthGoals;
-    private String name;
-    private String goals;
+    private String Name;
+    private String goal;
 
     @OneToMany(mappedBy = "user",fetch=FetchType.LAZY)
     private List<Notification> notifications;

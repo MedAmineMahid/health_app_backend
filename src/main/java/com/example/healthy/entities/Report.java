@@ -19,8 +19,6 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "report",fetch=FetchType.LAZY)
-    private List<Meal> meals;
 
 
     @OneToMany(mappedBy = "report",fetch=FetchType.LAZY)

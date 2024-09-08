@@ -13,5 +13,5 @@ public class UserDTO {
     private String lastName;
     private String healthGoals;
     private String goals;
-    private List<ActivityDTO> activities; // Use ActivityDTO
+    private List<ActivityDTO> activities;
 }

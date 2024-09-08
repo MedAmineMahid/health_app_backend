@@ -2,22 +2,28 @@ package com.example.healthy.services;
 
 import com.example.healthy.entities.Activity;
 import com.example.healthy.repositories.ActivityRepository;
+import com.example.healthy.security.services.CalorieCalculatorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
 @Service
 public class ActivityServiceImpl implements ActivityService {
 
     private final ActivityRepository activityRepository;
+    private final CalorieCalculatorService calorieCalculatorService;
 
-    public ActivityServiceImpl(ActivityRepository activityRepository) {
+    @Autowired
+    public ActivityServiceImpl(ActivityRepository activityRepository, CalorieCalculatorService calorieCalculatorService) {
         this.activityRepository = activityRepository;
+        this.calorieCalculatorService = calorieCalculatorService;
     }
 
     @Override
     public Activity saveActivity(Activity activity) {
+        double caloriesBurned = calorieCalculatorService.calculateCalories(activity.getTitle(), activity.getDuration());
+        activity.setCaloriesBurned(caloriesBurned);
         return activityRepository.save(activity);
     }
 
@@ -57,7 +63,7 @@ public class ActivityServiceImpl implements ActivityService {
         return activityRepository.findAll();
     }
 
-@Override
+    @Override
     public List<Activity> getActivitiesByUserId(String userId) {
         return activityRepository.findByUser_UserId(userId);
     }

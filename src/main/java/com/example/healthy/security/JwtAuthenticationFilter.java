@@ -37,8 +37,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
-            Claims claims = Jwts.parserBuilder().setSigningKey(secret.getBytes()).build().parseClaimsJws(jwt).getBody();
-            username = claims.getSubject();
+            try {
+                Claims claims = Jwts.parserBuilder()
+                        .setSigningKey(secret.getBytes())
+                        .build()
+                        .parseClaimsJws(jwt)
+                        .getBody();
+                username = claims.getSubject();
+            } catch (Exception e) {
+                System.out.println("Invalid JWT token");
+            }
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -52,5 +60,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
-    }
-}
+    }}

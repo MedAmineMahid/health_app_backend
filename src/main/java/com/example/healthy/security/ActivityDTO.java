@@ -11,7 +11,6 @@ public class ActivityDTO {
     private String description;
     private int duration;
     private LocalDate time;
-    // Only include necessary user details
     private String userId;
     private String username;
 }
