@@ -9,8 +9,8 @@ public class UserDTO {
     private String username;
     private int age;
     private String gender;
-    private String firstName;
-    private String lastName;
+    private String name;
+
     private String healthGoals;
     private String goals;
     private List<ActivityDTO> activities;

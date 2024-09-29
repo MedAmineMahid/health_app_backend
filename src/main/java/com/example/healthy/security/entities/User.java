@@ -1,6 +1,7 @@
 package com.example.healthy.security.entities;
 
 import com.example.healthy.entities.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +23,7 @@ public class User {
     private String password;
     private int age;
     private String gender;
-    private String Name;
+    private String name;
     private String goal;
 
     @OneToMany(mappedBy = "user",fetch=FetchType.LAZY)
@@ -30,8 +31,10 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles= new ArrayList<>();
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user")
     private List<Meal> meals;
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Activity> activities;
